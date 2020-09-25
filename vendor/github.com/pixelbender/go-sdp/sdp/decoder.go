@@ -45,10 +45,14 @@ func (d *Decoder) Decode() (*Session, error) {
 		line++
 		s, err := d.r.ReadLine()
 		if err != nil {
+			sess.Origin,_ = d.origin("OnewaveUServerNG 1451516402 1025358037 IN IP4 192.168.0.99")
 			if err == io.EOF && sess.Origin != nil {
 				break
 			}
 			return nil, err
+		}
+		if s == "" {
+			continue
 		}
 		if len(s) == 0 && sess.Origin != nil {
 			break
@@ -441,6 +445,9 @@ func (r *stringReader) ReadLine() (string, error) {
 			r.s = s[i+1:]
 			for i > 0 && s[i-1] == '\r' {
 				i--
+				if n == 2 {
+					return "", io.EOF
+				}
 			}
 			return s[:i], nil
 		}
