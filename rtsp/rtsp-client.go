@@ -625,7 +625,10 @@ func (client *RTSPClient) RequestWithPath(method string, path string, headers ma
 		}
 		if strings.Index(s, "Session:") == 0 {
 			splits := strings.Split(s, ":")
-			sid = strings.TrimSpace(splits[1])
+			sidTmp := strings.TrimSpace(splits[1])
+			in := strings.Split(sidTmp, ";")
+			sid = strings.TrimSpace(in[0])
+			client.Session = sid
 		}
 		//if strings.Index(s, "CSeq:") == 0 {
 		//	splits := strings.Split(s, ":")
